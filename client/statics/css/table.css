@@ -1,0 +1,103 @@
+table {
+    font-family: 'Avenir Next', Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+    background-color: #fff;
+}
+
+th, td {
+    font-weight: unset;
+    /*padding-right: 10px;*/
+}
+
+.column {
+    min-width: 110px;
+    max-width: 140px !important;
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.row.head th,
+.table th a {
+    padding-top: 24px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.row td {
+    padding-top: 18px;
+    padding-bottom: 14px;
+    height: 80px;
+}
+
+.table tbody tr {
+    animation-name: loading;
+    animation-duration: 2s;
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table {
+    display: flex;
+}
+
+.table__view {
+    justify-content: space-evenly;
+}
+
+.table__stat {
+    justify-content: space-evenly;
+}
+
+.table td {
+    color: #808080;
+    line-height: 1.4;
+}
+
+.table .head th,
+.table .head th a {
+    color: #fff;
+    line-height: 1.4;
+    text-transform: uppercase;
+
+    background-color: #011640;
+}
+
+.table .row:hover,
+.table .row.picked{
+    background-color: #f2f2f2;
+}
+
+.table .row:hover div * {
+    color: #F21F0C;
+    font-size: 1.5em;
+    transition-property: font-size;
+    transition-duration: 1.5s;
+    transition-timing-function: ease-out;
+}
+
+.table .row:active > * {
+    background-color: #959cbd;
+    color: #fff;
+}
+
+.table .row td:hover,
+.table .row td.picked {
+    background-color: #4f4f64;
+    color: #fff;
+}
+
+.table .row td:hover.cl_id,
+.table .row td:hover.cl_id * {
+    background-color: #cf200c;
+    color: #fff !important;
+}
+
+

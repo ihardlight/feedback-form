@@ -1,0 +1,23 @@
+.link {
+    color: #FFF;
+    font-size: 1.55em;
+    font-weight: bold;
+    position: relative;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.link:hover,
+.link:focus {
+    color: #FFFFFF;
+}
+
+.link--page {
+    display: block;
+    color: #e2e2e2;
+}
+
+.link--faded:hover,
+.link--faded:focus {
+    color: #04C4D9;
+}
