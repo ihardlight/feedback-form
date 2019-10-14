@@ -123,9 +123,9 @@ def execute_query(query, parameters: List):
 def get_view_comment_by_id(view_id):
     query = """select u.name, u.surname, u.middle_name, u.number, u.email, r.name, c.name, com.text, com.id
             from comments com
-            inner join users u on com.user_id = u.id
-            inner join cities c on com.city_id = c.id
-            inner join regions r on c.region_id = r.id
+            join users u on com.user_id = u.id
+            join cities c on com.city_id = c.id
+            join regions r on c.region_id = r.id
             where com.id = ?"""
     return execute_query(query, [view_id])[0]
 
@@ -133,23 +133,23 @@ def get_view_comment_by_id(view_id):
 def get_view_comments():
     query = """select u.name, u.surname, u.number, u.email, r.name, c.name, com.text, com.id
             from comments com
-            inner join users u on com.user_id = u.id
-            inner join cities c on com.city_id = c.id
-            inner join regions r on c.region_id = r.id"""
+            join users u on com.user_id = u.id
+            join cities c on com.city_id = c.id
+            join regions r on c.region_id = r.id"""
     return execute_query(query, [])
 
 
 def get_stat_regions(min_comments=0):
-    query = """select r.name, count(r.name) from regions r
-                            INNER JOIN cities c on r.id = c.region_id
-                            INNER JOIN comments c2 on c.id = c2.city_id
-                        group by r.name having count(r.name) > ?"""
+    query = """select region.name, count(*) from comments comment
+                            JOIN cities city on comment.city_id = city.id
+                            JOIN regions region on city.region_id = region.id
+                        group by region.name having count(*) > ?"""
     return execute_query(query, [min_comments])
 
 
 def get_stat_cities(region_name, min_comments=0):
-    query = """select c.name, count(c.name) from cities c
-                            INNER JOIN regions r on r.id = c.region_id and r.name = ?
-                            INNER JOIN comments c2 on c.id = c2.city_id
-                        group by c.name having count(c.name) >= ?"""
+    query = """select city.name, count(*) from cities city
+                            JOIN regions region on region.id = city.region_id and region.name = ?
+                            JOIN comments comment on city.id = comment.city_id
+                        group by city.name having count(*) >= ?"""
     return execute_query(query, [region_name, min_comments])
