@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from os.path import dirname, abspath
 import cgi
 import json
 import re
 import sys
-sys.path.insert(1, "/home/ilia/PycharmProjects/feedback-form/")
+
+sys.path.insert(1, dirname(dirname(abspath(__file__))))
 
 from server.controller.router import URLS
 
