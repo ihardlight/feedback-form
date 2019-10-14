@@ -1,4 +1,4 @@
-export function create(tag, props) {
+export const create = (tag, props) => {
     const element = document.createElement(tag);
 
     Object.entries(props).forEach(([key, value]) => {
@@ -11,4 +11,4 @@ export function create(tag, props) {
     });
 
     return element;
-}
+};

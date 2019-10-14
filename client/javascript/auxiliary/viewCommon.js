@@ -13,11 +13,11 @@ export const getShortText = (text, maxLen = 7) => {
 };
 
 export const setDefaultTable = (page, tableElem) => {
-    for (let row of page.querySelectorAll('tr')) {
+    page.querySelectorAll('tr').forEach(row => {
         if (tableElem.contains(row)) {
             tableElem.removeChild(row);
         }
-    }
+    })
 };
 
 export const updateCommentInfo = (page, view = {}) => {
