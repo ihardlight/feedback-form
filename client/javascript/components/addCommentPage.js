@@ -5,16 +5,16 @@ import {addCommentPageRender} from "./statics.js";
 
 
 export default () => {
+    const addComment = addCommentPage();
+    const form = addComment.querySelector('form[name=add-comment-form]');
     form.addEventListener('submit', formSubmitHandler);
     form['region'].addEventListener('change', changeRegionHandler);
 
-    updateRegions(addCommentPage).then();
-    return addCommentPage;
+    updateRegions(form).then();
+    return addComment;
 }
 
-const addCommentPage = create('div', addCommentPageRender);
-
-const form = addCommentPage.querySelector('form[name=add-comment-form]');
+const addCommentPage = () => create('div', addCommentPageRender);
 
 const elementsPatterns = {
     'number': /\+7\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/,
@@ -36,7 +36,7 @@ const formValidation = (form) => {
     });
 };
 
-const updateRegions = async () => {
+const updateRegions = async (form) => {
 
     await getRegions()
         .then(regions => {
@@ -50,7 +50,7 @@ const updateRegions = async () => {
         });
 };
 
-const updateCities = async (region_id) => {
+const updateCities = async (form, region_id) => {
 
     await getCities(region_id)
         .then(cities => {
@@ -65,7 +65,6 @@ const updateCities = async (region_id) => {
 };
 
 const addOption = (selectElem, {id, name} = {}) => {
-
     selectElem.append(create('option', {
         tag: 'option',
         value: id,
@@ -82,21 +81,21 @@ const setDefaultOptions = (selectElem) => {
 };
 
 const formSubmitHandler = (e) => {
-
+    const form = document.forms['add-comment-form'];
     e.preventDefault();
     formValidation(form);
 
     if (form.getElementsByClassName('with-error').length === 0) {
         submitForm(form).then((resp) => {
             if (!!resp) {
-                setDefaultForm();
+                setDefaultForm(form);
                 alert('Success submit!!!');
             }
         });
     }
 };
 
-const setDefaultForm = () => {
+const setDefaultForm = (form) => {
     Array.from(form.elements).forEach(elem => {
         if (elem.tagName === 'INPUT' || elem.tagName === 'TEXTAREA') {
             elem.value = ''
@@ -107,8 +106,8 @@ const setDefaultForm = () => {
 };
 
 const changeRegionHandler = () => {
-
+    const form = document.forms['add-comment-form'];
     form['city'].removeAttribute('disabled');
     const regionId = form['region'].value;
-    updateCities(regionId).then();
+    updateCities(form, regionId).then();
 };

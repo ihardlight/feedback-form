@@ -5,20 +5,20 @@ import {getShortText, setDefaultTable, updateCommentInfo, pickRowDueEvent} from 
 import {viewPageRender} from "./statics.js";
 
 
-export default function () {
-    disableSelecting(viewPage);
-    loadViews().catch((err) => {
+export default () => {
+    const view = viewPage();
+    disableSelecting(view);
+    loadViews(view).catch((err) => {
         console.log('Error during view loading');
         console.log(err);
     });
-    return viewPage;
+    return view;
 }
 
-const viewPage = create('div', viewPageRender);
+const viewPage = () => create('div', viewPageRender);
 
-const viewTable = viewPage.querySelector('table tbody');
-
-const loadViews = async () => {
+const loadViews = async (viewPage) => {
+    const viewTable = viewPage.querySelector('table tbody');
     setDefaultTable(viewPage, viewTable);
     document.addEventListener('scroll', scrollTableHandler);
     await addMoreViews(viewTable)
@@ -29,6 +29,8 @@ const loadViews = async () => {
 };
 
 const scrollTableHandler = async () => {
+    const viewPage = document.getElementById('page-view');
+    const viewTable = viewPage.querySelector('table tbody');
     if (document.documentElement.scrollTop >= document.documentElement.scrollHeight - 1300) {
         await addMoreViews(viewTable, 5)
             .catch((err) => {
@@ -83,7 +85,7 @@ const loadMoreViews = async (viewNum = 10) => {
 
 const getView = async function* () {
     const views = await getViews();
-    for (let view of views) {
+    for (const view of views) {
         yield view;
     }
 };
@@ -92,6 +94,7 @@ const viewGenerator = getView();
 
 const clickViewRowHandler = (e) => {
     pickRowDueEvent(e);
+    const viewPage = document.getElementById('page-view');
     const row = e.currentTarget;
     const pickedId = row.querySelector('td.cl_id > div > input').value;
     const hasDelete = Array.from(e.target.querySelectorAll('a')).some(s => s.textContent === 'Delete');
@@ -112,6 +115,7 @@ const clickViewRowHandler = (e) => {
 };
 
 const deleteViewHandler = (e) => {
+    const viewPage = document.getElementById('page-view');
     const button = e.currentTarget;
     const pickedId = button.querySelector('div > input').value;
     const tableElem = viewPage.querySelector('table tbody');

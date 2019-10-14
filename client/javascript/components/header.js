@@ -2,7 +2,7 @@ import {create} from "../auxiliary/render.js";
 import {getRelationUrl} from "../auxiliary/redirection.js";
 
 
-const navItems = [
+const navItems = () => [
     {title: 'Home', link: '/'},
     {title: 'Add feedback', link: '/comment'},
     {title: 'Manage feedback', link: '/view'},
@@ -14,7 +14,8 @@ export default () => {
         id: 'header',
         className: 'pages-nav'
     });
-    navItems.forEach((item) => {
+    const links = navItems();
+    links.forEach((item) => {
         header.append(makeNavNode({...item, parent: header}))
     });
 

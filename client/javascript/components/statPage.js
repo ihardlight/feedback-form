@@ -4,18 +4,18 @@ import {create} from "../auxiliary/render.js";
 import {getShortText, setDefaultTable, updateCommentInfo, pickRowDueEvent} from "../auxiliary/viewCommon.js";
 import {statPageRender} from "./statics.js";
 
-const statPage = create('div', statPageRender);
+const statPage = () => create('div', statPageRender);
 
-const statLoadFunctions = {
+const statLoadFunctions = () => {return {
     region: getRegionStat,
     city: getCityStat,
-};
+}};
 
 const statTimeouts = [];
 
-const loadStat = async (statParam, handler, statFilter) => {
+const loadStat = async (statPage, statParam, handler, statFilter) => {
     const statTable = statPage.querySelector(`table.table__${statParam} tbody`);
-    const statLoadFunction = statLoadFunctions[statParam];
+    const statLoadFunction = statLoadFunctions()[statParam];
     await statLoadFunction(statFilter)
         .then(stats => {
             setDefaultTable(statPage, statTable);
@@ -34,12 +34,12 @@ const loadStat = async (statParam, handler, statFilter) => {
         });
 };
 
-const loadRegionStat = async () => {
-    return loadStat('region', clickRegionRowHandler);
+const loadRegionStat = async (statPage) => {
+    return loadStat(statPage, 'region', clickRegionRowHandler);
 };
 
-const loadCityStat = async (regionName) => {
-    return loadStat('city', clickCityRowHandler, regionName);
+const loadCityStat = async (statPage, regionName) => {
+    return loadStat(statPage, 'city', clickCityRowHandler, regionName);
 };
 
 const loadViews = async (statPage, handler, cityName) => {
@@ -117,12 +117,14 @@ const clickRegionRowHandler = (e) => {
     }
     pickRowDueEvent(e);
 
+
+    const statPage = document.getElementById('page-stat');
     const regionName = row.querySelector('td').textContent;
     const viewTable = statPage.querySelector('table.table__view tbody');
     clearStatTimeouts();
     setDefaultTable(statPage, viewTable);
 
-    loadCityStat(regionName)
+    loadCityStat(statPage, regionName)
         .then(() => {
             updateCommentInfo(statPage);
             const cityRows = statPage.querySelectorAll('table.table__city tr');
@@ -146,6 +148,7 @@ const clickCityRowHandler = (e) => {
     const cityName = row.querySelector('td').textContent;
     clearStatTimeouts();
 
+    const statPage = document.getElementById('page-stat');
     loadViews(statPage, clickViewRowHandler, cityName)
         .then(() => {
             updateCommentInfo(statPage);
@@ -166,6 +169,7 @@ const clickViewRowHandler = (e) => {
     const commentId = row.querySelector('input').value;
     clearStatTimeouts();
 
+    const statPage = document.getElementById('page-stat');
     getViewById(commentId)
         .then((view) => {
             updateCommentInfo(statPage, view);
@@ -182,14 +186,15 @@ const clearStatTimeouts = () => {
 };
 
 export default () => {
-    disableSelecting(statPage);
-    loadRegionStat(statPage)
+    const stat = statPage();
+    disableSelecting(stat);
+    loadRegionStat(stat)
         .then(() => {
-            updateCommentInfo(statPage);
+            updateCommentInfo(stat);
         })
         .catch(err => {
             console.log(`Error during loading region stat`);
             console.log(err);
         });
-    return statPage;
+    return stat;
 }
