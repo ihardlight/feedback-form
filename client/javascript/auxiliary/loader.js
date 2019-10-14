@@ -25,9 +25,9 @@ const content = create('div', {
 
 const contentRouter = {
     '^$': main,
-    '^comment': addComment,
-    '^view': view,
-    '^stat': stat,
+    '^comment$': addComment,
+    '^view$': view,
+    '^stat$': stat,
     '.+': notFound
 };
 
@@ -40,9 +40,9 @@ const updateContent = (content) => {
 
 const setDefaultById = (elementId) => {
     const tag = document.getElementById(elementId);
-    for (let child of document.querySelectorAll(`#${elementId} > *`)) {
+    document.querySelectorAll(`#${elementId} > *`).forEach(child =>  {
         tag.removeChild(child);
-    }
+    })
 
 };
 
