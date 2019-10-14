@@ -77,7 +77,7 @@ def stat(request, action):
     if stat_param == 'region':
         regions_comments = stat_regions(min_comments)
         return regions_comments
-    if stat_param == 'city':
+    elif stat_param == 'city':
         region_name = request.getfirst('region-name')
         city_comments = stat_cities(region_name, min_comments)
         return city_comments
