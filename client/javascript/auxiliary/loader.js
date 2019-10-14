@@ -4,13 +4,13 @@ import {getRelationUrl} from "./redirection.js";
 
 
 // for handling manual changes in url
-window.onhashchange = (e) => {
+window.addEventListener('hashchange', (e) => {
     e.preventDefault();
     if (e.oldURL === e.newURL)
         return;
     updateContent(content);
     return false;
-};
+});
 
 // for handling redirection in header
 document.addEventListener('header-change-url', () => {
